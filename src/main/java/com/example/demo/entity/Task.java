@@ -19,8 +19,8 @@ public class Task implements Serializable{
     @Column(name = "id")
     private Integer id;
 	
-	@Column(name = "cronExpression", length = 20)
-	private String cronExpression;
+	/*@Column(name = "cronExpression", length = 20)
+	private String cronExpression;*/
 	
     @Column(name = "nom_job", length = 20,nullable = false)
     private String nom_job;
@@ -79,13 +79,13 @@ public class Task implements Serializable{
   
 	  
 	
-    public String getCronExpression() {
+    /*public String getCronExpression() {
         return cronExpression;
     }
 
     public void setCronExpression(String cronExpression) {
         this.cronExpression = cronExpression;
-    }
+    }*/
     
     public Task() {
     	super();
