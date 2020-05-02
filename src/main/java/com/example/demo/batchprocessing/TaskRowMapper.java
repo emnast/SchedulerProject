@@ -19,7 +19,7 @@ public class TaskRowMapper implements RowMapper<Task>{
     	task.setType_commande(rs.getString("type_commande"));
     	task.setScript(rs.getString("script"));
     	task.setDate_execution(rs.getDate("date_execution"));
-    	task.setCronExpression(rs.getString("cronExpression"));
+    //	task.setCronExpression(rs.getString("cronExpression"));
     
              
         return task;
