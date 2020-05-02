@@ -90,7 +90,7 @@ public class Task implements Serializable{
     public Task() {
     	super();
     }
-    public Task(Integer id, String nom_job, String type_commande, String description, String script, String cronExpression, Date date_execution ) {
+    public Task(Integer id, String nom_job, String type_commande, String description, String script, Date date_execution ) {
     	super();
     	this.id=id;
         this.nom_job = nom_job;
@@ -98,7 +98,7 @@ public class Task implements Serializable{
         this.description = description;
         this.script = script;
        this.date_execution = date_execution;
-        this.cronExpression = cronExpression;
+       // this.cronExpression = cronExpression;
        
     }
   
