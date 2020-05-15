@@ -1,0 +1,94 @@
+package com.example.demo.batchprocessing;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.stream.Stream;
+
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.Trigger;
+import org.springframework.scheduling.TriggerContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.annotation.SchedulingConfigurer;
+import org.springframework.scheduling.config.ScheduledTaskRegistrar;
+import org.springframework.scheduling.config.TriggerTask;
+import org.springframework.scheduling.support.CronTrigger;
+
+import com.example.demo.entity.Task;
+import com.example.demo.repository.TaskRepository;
+
+@Configuration
+@EnableScheduling
+public class SchedulerConfig implements SchedulingConfigurer, DisposableBean {
+
+	@Value("${scheduler.trigger.cron-expression}")
+	protected String cronExpression;
+	ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+	
+	@Autowired
+	private TaskRepository repository;
+
+	@Override
+	
+	public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
+		
+		//List<Task> tasks = Arrays.asList(new Task(), new Task());
+		List<Task> tasks = repository.findAll();//get from DB
+		tasks.forEach(t -> {
+			Runnable runnableTask = () -> executeBatFile(t.getScript());
+			
+			//System.out.println("Running..."+Calendar.getInstance().getTime());
+			// runnableTask = () -> System.out.println("Trigger task executed at " + new Date());
+			
+
+			Trigger trigger = new Trigger() {
+
+				@Override
+
+				public Date nextExecutionTime(TriggerContext triggerContext) {
+
+					CronTrigger crontrigger = new CronTrigger(t.getCronExpression());
+
+					return crontrigger.nextExecutionTime(triggerContext);
+
+				}
+
+			};
+
+			taskRegistrar.addTriggerTask(runnableTask, trigger);
+		});
+		
+
+	}
+
+	@Override
+
+	public void destroy() throws Exception {
+
+		if (executor != null) {
+
+			executor.shutdownNow();
+
+		}
+	}
+	
+	public void executeBatFile(String filePath) {
+		try {
+			Runtime.getRuntime().
+			   exec("cmd /c " + filePath);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+}
