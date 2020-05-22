@@ -39,7 +39,7 @@ public class TaskController {
 		return jobservice.listAllTask();
 	}
 
-		//Add user
+		//Add task
 	@RequestMapping(method = RequestMethod.POST)
 	public Task addTask(@RequestBody Task task) {
 		return jobservice.addTask(task);
@@ -57,7 +57,7 @@ public class TaskController {
 		jobservice.deleteTask(id);
 	}
 
-	//Modifier user 
+	//Modifier task
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public Task updateTask(@PathVariable Integer id, @RequestBody Task task) {
 		return jobservice.updateTask(id, task);
