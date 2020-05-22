@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.TriggerContext;
@@ -22,10 +23,14 @@ import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.config.TriggerTask;
 import org.springframework.scheduling.support.CronTrigger;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.entity.ListeExecJob;
 import com.example.demo.entity.Task;
 import com.example.demo.repository.TaskRepository;
 
+
+@ConditionalOnProperty(name = "scheduler.enabled")
 @Configuration
 @EnableScheduling
 public class SchedulerConfig implements SchedulingConfigurer, DisposableBean {
@@ -34,6 +39,9 @@ public class SchedulerConfig implements SchedulingConfigurer, DisposableBean {
 	protected String cronExpression;
 	ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 	
+	 @Value("${scheduler.enabled:true}")
+	    private boolean active;
+	
 	@Autowired
 	private TaskRepository repository;
 
@@ -41,19 +49,23 @@ public class SchedulerConfig implements SchedulingConfigurer, DisposableBean {
 	
 	public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
 		
-		//List<Task> tasks = Arrays.asList(new Task(), new Task());
-		List<Task> tasks = repository.findAll();//get from DB
+		//List<Task> tasks = Arrays.asList(new Task(), new Task());//get from DB
+		
+		List<Task> tasks = repository.findAll();
 		tasks.forEach(t -> {
-			Runnable runnableTask = () -> executeBatFile(t.getScript());
 			
-			//System.out.println("Running..."+Calendar.getInstance().getTime());
-			// runnableTask = () -> System.out.println("Trigger task executed at " + new Date());
+	//if(t.getActive() == true) {
+		
+			ListeExecJob liste= new ListeExecJob();
+			//liste.setTask(tasks);
+			liste.setDate_execution(t.getDate_execution());
 			
-
+			Runnable runnableTask = () -> executeBatFile(t.getScript(), liste);
+			liste.setFin_execution(new Date());
+	
 			Trigger trigger = new Trigger() {
 
 				@Override
-
 				public Date nextExecutionTime(TriggerContext triggerContext) {
 
 					CronTrigger crontrigger = new CronTrigger(t.getCronExpression());
@@ -65,13 +77,12 @@ public class SchedulerConfig implements SchedulingConfigurer, DisposableBean {
 			};
 
 			taskRegistrar.addTriggerTask(runnableTask, trigger);
+//	}
 		});
 		
-
 	}
 
 	@Override
-
 	public void destroy() throws Exception {
 
 		if (executor != null) {
@@ -81,14 +92,21 @@ public class SchedulerConfig implements SchedulingConfigurer, DisposableBean {
 		}
 	}
 	
-	public void executeBatFile(String filePath) {
+	//@Transactional(readOnly=true)
+	public void executeBatFile(String filePath, ListeExecJob liste) {
 		try {
+			
 			Runtime.getRuntime().
 			   exec("cmd /c " + filePath);
+			liste.setStatus("success");
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			liste.setStatus("failed");
+			
 		}
+		
 	}
 
 }
+
