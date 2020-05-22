@@ -1,4 +1,4 @@
-package com.example.demo.batchprocessing;
+/*package com.example.demo.batchprocessing;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
 	  @Override
 	  public void afterJob(JobExecution jobExecution) {
 	    if(jobExecution.getStatus() == BatchStatus.COMPLETED) {
-	      log.info("!!! JOB FINISHED! Changer le status de la taches exécutée");
+	      log.info("!!! JOB FINISHED! Changer le status de la taches exécutée");*/
 
 	      /*jdbcTemplate.query("SELECT id, libelle FROM taches",
 	        (rs, row) -> new Taches(
@@ -45,6 +45,6 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
 			       jobExecution.setExitStatus(new ExitStatus("CUSTOM FAILURE STATUS"));
 
 			    }
-		  }*/
+		  }
 	  }
-}
+}*/
