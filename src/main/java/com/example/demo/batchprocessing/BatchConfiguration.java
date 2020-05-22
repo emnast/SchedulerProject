@@ -1,4 +1,4 @@
-package com.example.demo.batchprocessing;
+/*package com.example.demo.batchprocessing;
 
 
 import java.util.List;
@@ -48,7 +48,7 @@ public class BatchConfiguration {
        databaseReader.setRowMapper(new TaskRowMapper());
 
        return databaseReader;
-  }
+  }*/
    
  /*
  @Bean
@@ -56,7 +56,7 @@ public class BatchConfiguration {
   return new CustomItemWriter();
  }*/
    
-	@Bean
+	/*@Bean
 	public TaskItemProcessor processor() {
 		return new TaskItemProcessor();
 	}
@@ -73,10 +73,6 @@ public class BatchConfiguration {
 	
 	  			System.out.println("written " + task + " brackets");
 	
-			/*for (Task item : items) {
-				item.setStatus(2);
-				taskRepository.save(item);
-			}*/
 	  		}
 	  	};
 	}
@@ -101,7 +97,7 @@ public class BatchConfiguration {
     .build();
  }
  
-	/*@Bean
+	@Bean
 	public Job ExecuteTacheJob(JobCompletionNotificationListener listener, Step step1) {
 	   return jobBuilderFactory.get("ExecuteTacheJob")
 	     .incrementer(new RunIdIncrementer())
@@ -109,6 +105,7 @@ public class BatchConfiguration {
 	     .flow(step1)
 	     .end()
 	     .build();
-	}*/
+	}
 }
 
+*/
