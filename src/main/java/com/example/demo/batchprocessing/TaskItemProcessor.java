@@ -1,4 +1,4 @@
-package com.example.demo.batchprocessing;
+/*package com.example.demo.batchprocessing;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +16,7 @@ public class TaskItemProcessor implements ItemProcessor<Task, Task> {
 		  if(task == null) {
 			  throw new NullPointerException("Aucune tache disponible");
 		  }
-		  /**Sinon
-		  /* Si une tache existe alors et que le status est en attente et la date d'execution
-		  */
+		
 		  System.out.println("task name " + task.getNom_job());
 
 		  
@@ -26,3 +24,4 @@ public class TaskItemProcessor implements ItemProcessor<Task, Task> {
 	  }
 
 }
+*/
