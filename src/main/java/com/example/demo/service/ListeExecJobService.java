@@ -32,23 +32,24 @@ public class ListeExecJobService {
 	    public ListeExecJob addListeExecJob(ListeExecJob SJI){
 	       return SJIRepos.save(SJI);
 	    }
-	    public ListeExecJob getByreferenece(int id){
-	        return SJIRepos.findById(id).get();
+	    public ListeExecJob getByreferenece(Integer idListe){
+	        return SJIRepos.findById(idListe).isPresent()? SJIRepos.findById(idListe).get():null;
+	   	
 	    }
-	    public void deleteListeExecJob(int id){
-	    	SJIRepos.deleteById(id);
+	    public void deleteListeExecJob(Integer idListe){
+	    	SJIRepos.deleteById(idListe);
 	    }
 
 		
-		public ListeExecJob updateListeExecJob(Integer id , ListeExecJob sji){
+		public ListeExecJob updateListeExecJob(Integer idListe , ListeExecJob sji){
 		ListeExecJob sji01 = new ListeExecJob();
 		sji01 = sji;
-		sji01.setId(id);
+		sji01.setIdListe(idListe);
 		return addListeExecJob(sji01);
 	 }
 
-	public void deleteById(Integer id) {
-		SJIRepos.deleteById(id);
+	public void deleteById(Integer idListe) {
+		SJIRepos.deleteById(idListe);
 	}
 
 }
