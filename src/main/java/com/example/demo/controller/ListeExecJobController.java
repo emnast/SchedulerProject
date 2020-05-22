@@ -16,7 +16,7 @@ import com.example.demo.service.ListeExecJobService;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/listeExecJob")
+@RequestMapping("/Liste")
 public class ListeExecJobController {
 	
 	@Autowired
@@ -30,8 +30,8 @@ public class ListeExecJobController {
 	
 	
 	@RequestMapping(method = RequestMethod.GET) 
-public List<ListeExecJob> listAllListeExecJob() {
-	return sjiservice.listAllListeExecJob();
+    public List<ListeExecJob> listAllListeExecJob() {
+ 	return sjiservice.listAllListeExecJob();
 }
 
 	//Add user
@@ -41,21 +41,21 @@ public ListeExecJob addListeExecJob(@RequestBody ListeExecJob sji) {
 }
 
 // find by id
-@RequestMapping(value = "/{id}",method = RequestMethod.GET )
-public ListeExecJob getByreferenece(@PathVariable int id) {
-	return sjiservice.getByreferenece(id);
+@RequestMapping(value = "/findById/{idListe}", method = RequestMethod.GET )
+public ListeExecJob getByreferenece(@PathVariable Integer idListe) {
+	return sjiservice.getByreferenece(idListe);
 }
 
 //delete par id
-@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
-public void deleteListeExecJob(@PathVariable int id) {
-	sjiservice.deleteListeExecJob(id);
+@RequestMapping(value="/{idListe}",method=RequestMethod.DELETE)
+public void deleteListeExecJob(@PathVariable Integer idListe) {
+	sjiservice.deleteListeExecJob(idListe);
 }
 
 //Modifier user 
-@RequestMapping(method = RequestMethod.PUT,value = "/{id}")
-public ListeExecJob updateListeExecJob(@PathVariable Integer id, @RequestBody ListeExecJob sji) {
-	return sjiservice.updateListeExecJob(id, sji);
+@RequestMapping(value = "/{idListe}", method = RequestMethod.PUT)
+public ListeExecJob updateListeExecJob(@PathVariable Integer idListe, @RequestBody ListeExecJob sji) {
+	return sjiservice.updateListeExecJob(idListe, sji);
 }
 
 }
