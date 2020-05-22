@@ -1,8 +1,7 @@
 package com.example.demo.entity;
 import javax.persistence.*;
 
-
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
@@ -35,11 +34,27 @@ public class Task implements Serializable{
     private String script;
     
    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm")
-    @Column(name = "date_execution", length = 20,nullable = false)
+    @Column(name = "date_execution")
     private Date date_execution;
     
+   @Column(name = "active")
+   private boolean  active;
+   
+   @JsonBackReference
+   @ManyToOne
+   @JoinColumn(name="id_liste")
+   private ListeExecJob liste;
+   
     
-    public Integer getId() {
+    public ListeExecJob getListe() {
+	return liste;
+}
+public void setListe(ListeExecJob liste) {
+	this.liste = liste;
+}
+
+
+	public Integer getId() {
         return id;
     }
     public void setId(Integer id) {
@@ -76,7 +91,12 @@ public class Task implements Serializable{
         this.date_execution = date_execution;
     }
   
-  
+    public boolean getActive() {
+        return active;
+    }
+    public void setActive(boolean  active) {
+        this.active = active;
+    }
 	  
 	
     public String getCronExpression() {
@@ -88,9 +108,10 @@ public class Task implements Serializable{
     }
     
     public Task() {
-    	super();
+    	
     }
-    public Task(Integer id, String nom_job, String type_commande, String description, String script, Date date_execution, String cronExpression ) {
+    public Task(Integer id, String nom_job, String type_commande, String description, String script,
+    		Date date_execution, String cronExpression, boolean  active) {
     	super();
     	this.id=id;
         this.nom_job = nom_job;
@@ -98,7 +119,8 @@ public class Task implements Serializable{
         this.description = description;
         this.script = script;
        this.date_execution = date_execution;
-       this.cronExpression = cronExpression;
+        this.cronExpression = cronExpression;
+        this.active=active ;
        
     }
   
