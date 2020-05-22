@@ -2,20 +2,25 @@ package com.example.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.entity.ListeExecJob;
 import com.example.demo.entity.Task;
 import com.example.demo.repository.TaskRepository;
 
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(propagation= Propagation.SUPPORTS)
 @Primary
 public class TaskService {
 
 	@Autowired
     private TaskRepository repository;
+	
+	@Autowired
+    private ListeExecJobService service;
 	
 	@Autowired
 	public TaskService(TaskRepository repository) {
@@ -27,7 +32,19 @@ public class TaskService {
         return repository.findAll();
     }
     public Task addTask(Task task){
-       return repository.save(task);
+     //  return repository.save(task);
+      ListeExecJob ab = service.getByreferenece(task.getListe().getIdListe());
+    	task.setListe(ab);
+		ab.addTask(task);
+		System.out.println(task.getListe().getIdListe());
+    	ab.addTask(task);
+    	repository.save(task);
+    	
+    /*		ListeExecJob ab = service.getByreferenece(((Task) task).getListe().getIdListe());
+		ab.addTask(task);*/
+		
+    	
+    	return task;
     }
     
     public Task updateTask(Integer id , Task task){
