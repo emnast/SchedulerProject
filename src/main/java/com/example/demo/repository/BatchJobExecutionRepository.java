@@ -1,4 +1,4 @@
-package com.example.demo.repository;
+/*package com.example.demo.repository;
 
 import java.util.Date;
 import java.util.List;
@@ -15,4 +15,4 @@ public interface BatchJobExecutionRepository extends JpaRepository<BatchJobExecu
     List<BatchJobExecution> findByCreateTime(Date createTime);
     //Récupérer tous les batchs par le status
     List<BatchJobExecution> findByStatus(String status);
-}
+}*/
