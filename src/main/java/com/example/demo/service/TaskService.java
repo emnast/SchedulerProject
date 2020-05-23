@@ -32,19 +32,28 @@ public class TaskService {
         return repository.findAll();
     }
     public Task addTask(Task task){
-     //  return repository.save(task);
-      ListeExecJob ab = service.getByreferenece(task.getListe().getIdListe());
+    
+	     ListeExecJob ab = service.getByreferenece(task.getListe().getIdListe());
+         if(ab==null) {
+       	  ab=task.getListe();
+       	  service.addListeExecJob(ab);
+       	  System.out.println(ab.getIdListe());
+         }
+
+       	repository.save(task);
+
+       	return task;
+	    
+    /*  ListeExecJob ab = service.getByreferenece(task.getListe().getIdListe());
     	task.setListe(ab);
 		ab.addTask(task);
 		System.out.println(task.getListe().getIdListe());
     	ab.addTask(task);
     	repository.save(task);
     	
-    /*		ListeExecJob ab = service.getByreferenece(((Task) task).getListe().getIdListe());
-		ab.addTask(task);*/
-		
-    	
-    	return task;
+ 		ListeExecJob ab = service.getByreferenece(((Task) task).getListe().getIdListe());
+		ab.addTask(task);
+		  	return task;*/
     }
     
     public Task updateTask(Integer id , Task task){
