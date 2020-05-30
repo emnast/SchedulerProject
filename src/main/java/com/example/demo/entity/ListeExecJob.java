@@ -41,7 +41,7 @@ public class ListeExecJob implements Serializable {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "idListe")
+	@Column(name = "id_liste")
     private int idListe;
 	
     
@@ -65,10 +65,10 @@ public class ListeExecJob implements Serializable {
     @Column(name = "next_execution")
     private Date next_execution;
     
-    @JsonManagedReference
-    @OneToMany(mappedBy="liste",cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-    @JsonIgnore
-	 private List<Task> task;
+   
+    @ManyToOne
+    @JoinColumn(name = "id_task")
+    private Task task;
   
     
     public int getIdListe() {
@@ -79,22 +79,6 @@ public class ListeExecJob implements Serializable {
   		this.idListe = idListe;
   	}
   	
-   /* public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}*/
-
-	/*public String getNom_job() {
-		return nom_job;
-	}
-
-	public void setNom_job(String nom_job) {
-		this.nom_job = nom_job;
-	}
-	*/
 
 	public Date getDate_creation() {
 		return date_creation;
@@ -128,32 +112,14 @@ public class ListeExecJob implements Serializable {
 		this.status = status;
 	}
 
-	@JsonIgnore
-	public List<Task> getTask() {
-		
-		if (task == null) {
-			task = new ArrayList<>();
-	    }
-		
-		
-		return this.task;
-	}
-	public void addTask(Task task) {
-		getTask().add((Task) task);
-	    ((Task) task).setListe(this);
-	}
+	public Task getTask() {
+		return task;
+		}
 
-	public void removeTask(Task task) {
-		getTask().remove(task);
-		task.setListe(null);
-	}
-
-	
-	@JsonSetter
-	public void setTask(List<Task> task) {
+		public void setTask(Task task) {
 		this.task = task;
-	}
-	
+		}
+
 
 	public ListeExecJob() {
 	
