@@ -62,5 +62,14 @@ public class TaskController {
 	public Task updateTask(@PathVariable Integer id, @RequestBody Task task) {
 		return jobservice.updateTask(id, task);
 	}
+	
+		// executeNow
+	@RequestMapping(value = "/executeNow", method = RequestMethod.POST)
+	public void executeNow(@RequestBody Task task) {
+		System.out.println("Controller: going to execute the task now...");
+		String result = jobservice.executeNow(task);
+		System.out.println("result: "+result);
+		System.out.println("Controller: task was executed .");
+	}
 
 }
