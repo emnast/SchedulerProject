@@ -35,8 +35,8 @@ import com.example.demo.repository.TaskRepository;
 @EnableScheduling
 public class SchedulerConfig implements SchedulingConfigurer, DisposableBean {
 
-	@Value("${scheduler.trigger.cron-expression}")
-	protected String cronExpression;
+	/*@Value("${scheduler.trigger.cron-expression}")
+	protected String cronExpression;*/
 	ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 	
 	 @Value("${scheduler.enabled:true}")
