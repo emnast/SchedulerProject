@@ -19,7 +19,7 @@ import com.example.demo.batchprocessing.SchedulerConfig;
 import com.example.demo.entity.ListeExecJob;
 import com.example.demo.entity.Task;
 import com.example.demo.repository.TaskRepository;
-import com.example.demo.util.CronUtil;
+import com.example.demo.batchprocessing.CronUtil;
 
 @Service
 @Transactional(propagation = Propagation.SUPPORTS)
