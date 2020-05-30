@@ -57,7 +57,8 @@ public class SchedulerConfig implements SchedulingConfigurer, DisposableBean {
 	//if(t.getActive() == true) {
 		
 			ListeExecJob liste= new ListeExecJob();
-			//liste.setTask(tasks);
+			
+			liste.setTask(t);
 			liste.setDate_execution(t.getDate_execution());
 			
 			Runnable runnableTask = () -> executeBatFile(t.getScript(), liste);
