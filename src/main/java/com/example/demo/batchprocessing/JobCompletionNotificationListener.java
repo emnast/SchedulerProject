@@ -31,10 +31,10 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
 	          rs.getString(1),
 	          rs.getString(2))
 	      ).forEach(taches -> log.info("Found <" + taches + "> in the database."));*/
-	    }
+	   /*  }
 
 	    
-	 /*   @Override
+	   @Override
 		  public void afterJob(JobExecution jobExecution) {
 			  if( jobExecution.getStatus() == BatchStatus.COMPLETED ){
 

@@ -2,7 +2,9 @@ package com.example.demo.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,7 @@ public class TaskService {
 
 	@Autowired
 	private TaskRepository repository;
+	
 
 	@Autowired
 	private ListeExecJobService service;
@@ -76,7 +79,15 @@ public class TaskService {
 		};
 		taskRegistrar.addTriggerTask(runnableTask, trigger);
 		}
+		List<ListeExecJob> a =task.getListe();
 		repository.save(task);
+		for (Iterator iterator = a.iterator(); iterator.hasNext();) {
+			ListeExecJob e = (ListeExecJob) iterator.next();
+			e.setTask(task);
+		}
+		service.updateList(a);
+
+
 		return task;
 
 	}

@@ -44,8 +44,7 @@ public class Task implements Serializable {
 	@Column(name = "active")
 	private boolean active = true;
 
-	@OneToMany(mappedBy = "task", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-	@JsonIgnore
+	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<ListeExecJob> liste ;
 
 	public List<ListeExecJob> getListe() {

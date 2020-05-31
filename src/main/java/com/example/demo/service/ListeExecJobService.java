@@ -44,7 +44,17 @@ public class ListeExecJobService {
 		return SJIRepos.save(SJI);
 		
 	}
-
+	public List<ListeExecJob> updateList(List<ListeExecJob> SJI) {
+		
+		/*if (t == null) {
+			t = new Task();
+			serv.addTask(t);
+			System.out.println("ID:"+t.getId());
+		}*/
+		
+		return SJIRepos.saveAll(SJI);
+		
+	}
 	public ListeExecJob getByreferenece(Integer idListe) {
 		return SJIRepos.findById(idListe).isPresent() ? SJIRepos.findById(idListe).get() : null;
 

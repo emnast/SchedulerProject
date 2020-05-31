@@ -68,6 +68,7 @@ public class ListeExecJob implements Serializable {
    
     @ManyToOne
     @JoinColumn(name = "id_task")
+    @JsonIgnore
     private Task task;
   
     
