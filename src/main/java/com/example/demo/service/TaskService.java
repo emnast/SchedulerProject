@@ -79,14 +79,15 @@ public class TaskService {
 		};
 		taskRegistrar.addTriggerTask(runnableTask, trigger);
 		}
-		List<ListeExecJob> a =task.getListe();
+		/*List<ListeExecJob> a =task.getListe();
 		repository.save(task);
 		for (Iterator iterator = a.iterator(); iterator.hasNext();) {
 			ListeExecJob e = (ListeExecJob) iterator.next();
 			e.setTask(task);
 		}
-		service.updateList(a);
-
+		service.updateList(a);*/
+                           rep.save(liste);
+				repository.save(task);
 
 		return task;
 
