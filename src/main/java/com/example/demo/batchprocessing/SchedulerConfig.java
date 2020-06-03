@@ -54,12 +54,12 @@ public class SchedulerConfig implements SchedulingConfigurer, DisposableBean {
 		List<Task> tasks = repository.findAll();
 		tasks.forEach(t -> {
 			
-	//if(t.getActive() == true) {
+	if(t.getActive() == true) {
 		
 			ListeExecJob liste= new ListeExecJob();
 			
 			liste.setTask(t);
-			liste.setDate_execution(t.getDate_execution());
+			liste.setDate_execution(new Date());
 			
 			Runnable runnableTask = () -> executeBatFile(t.getScript(), liste);
 			liste.setFin_execution(new Date());
@@ -78,7 +78,11 @@ public class SchedulerConfig implements SchedulingConfigurer, DisposableBean {
 			};
 
 			taskRegistrar.addTriggerTask(runnableTask, trigger);
-//	}
+			liste.setFin_execution(new Date());
+	}
+			      t.addListe(liste);
+			//liste.setTask(t);
+			rep.save(liste);
 		});
 		
 	}
