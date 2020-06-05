@@ -130,6 +130,9 @@ public class TaskService {
 		final ListeExecJob liste = ab;
 		Runnable runnableTask = () -> sc.executeBatFile(t.getScript(), liste);
 		taskRegistrar.addTriggerTask(runnableTask, crontrigger);
+		
+		executor.schedule(runnableTask,3L, TimeUnit.SECONDS);
+		
 		System.out.println("task was executed .");
 		service.updateListeExecJob(liste.getIdListe(), liste);
 		repository.save(t);
