@@ -119,7 +119,11 @@ public class TaskService {
 		}
 
 		crontrigger = new CronTrigger(cronExpression);
-		ListeExecJob ab = null;
+		ListeExecJob liste= new ListeExecJob();
+		liste.setTask(t);
+		liste.setDate_execution(new Date());
+		
+		/*ListeExecJob ab = null;
 		if(t.getListe() != null)
 			ab = service.getByreferenece(((ListeExecJob) t.getListe()).getIdListe());
 		else {
@@ -127,14 +131,17 @@ public class TaskService {
 			t.setListe((List<ListeExecJob>) ab);
 		}
 		System.out.println("(Execute Now) Execution List ID:"+ab.getIdListe());
-		final ListeExecJob liste = ab;
+		final ListeExecJob liste = ab;*/
 		Runnable runnableTask = () -> sc.executeBatFile(t.getScript(), liste);
 		taskRegistrar.addTriggerTask(runnableTask, crontrigger);
 		
 		executor.schedule(runnableTask,3L, TimeUnit.SECONDS);
 		
 		System.out.println("task was executed .");
-		service.updateListeExecJob(liste.getIdListe(), liste);
+	//	service.updateListeExecJob(liste.getIdListe(), liste);
+		t.addListe(liste);
+		liste.setTask(t);
+		rep.save(liste);
 		repository.save(t);
 		return "OK";
 	}
