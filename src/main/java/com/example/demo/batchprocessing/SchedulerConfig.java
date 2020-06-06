@@ -14,6 +14,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.TriggerContext;
@@ -27,7 +28,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.entity.ListeExecJob;
 import com.example.demo.entity.Task;
+import com.example.demo.repository.ListeExecJobRepository;
 import com.example.demo.repository.TaskRepository;
+import com.example.demo.service.ListeExecJobService;
+import com.example.demo.service.TaskService;
 
 
 @ConditionalOnProperty(name = "scheduler.enabled")
