@@ -39,14 +39,22 @@ import com.example.demo.service.TaskService;
 @EnableScheduling
 public class SchedulerConfig implements SchedulingConfigurer {
 
+	private ScheduledTaskRegistrar taskRegistrar;
+
 	@Override
 	public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
+		this.taskRegistrar = taskRegistrar;
 		taskRegistrar.setScheduler(executor());
 	}
 
 	@Bean(destroyMethod="shutdown")
 	public ScheduledExecutorService executor() {
 		return Executors.newSingleThreadScheduledExecutor();
+	}
+
+	@Bean
+	public ScheduledTaskRegistrar taskRegistrar(){
+		return taskRegistrar;
 	}
 }
 
