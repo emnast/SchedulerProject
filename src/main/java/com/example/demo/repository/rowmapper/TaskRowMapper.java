@@ -1,4 +1,4 @@
-package com.example.demo.batchprocessing;
+package com.example.demo.repository.rowmapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
