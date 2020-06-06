@@ -39,11 +39,10 @@ import com.example.demo.service.TaskService;
 @EnableScheduling
 public class SchedulerConfig implements SchedulingConfigurer {
 
-	private ScheduledTaskRegistrar taskRegistrar;
 
 	@Override
+	@Autowired
 	public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-		this.taskRegistrar = taskRegistrar;
 		taskRegistrar.setScheduler(executor());
 	}
 
@@ -54,7 +53,7 @@ public class SchedulerConfig implements SchedulingConfigurer {
 
 	@Bean
 	public ScheduledTaskRegistrar taskRegistrar(){
-		return taskRegistrar;
+		return new ScheduledTaskRegistrar();
 	}
 }
 
