@@ -21,6 +21,7 @@ import com.example.demo.repository.ListeExecJobRepository;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.service.ListeExecJobService;
 import com.example.demo.service.TaskService;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class StartupApplicationListenerExample implements ApplicationListener<ContextStartedEvent> {
@@ -32,7 +33,8 @@ public class StartupApplicationListenerExample implements ApplicationListener<Co
 	private TaskSchedulerService taskSchedulerService;
 
  
-    @Override 
+    @Override
+    @Transactional
     public void onApplicationEvent(ContextStartedEvent event) {
 		List<Task> tasks = repository.findAll();
 		taskSchedulerService.scheduleTask(tasks);
