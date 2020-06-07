@@ -116,10 +116,10 @@ public class SchedulerConfig implements SchedulingConfigurer, DisposableBean {
 		}
 		
 	}
-	@Bean
+	/*@Bean
 public ScheduledExecutorService executor(){
     return executor;
-}
+}*/
 
 }
 
