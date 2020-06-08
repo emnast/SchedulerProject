@@ -1,4 +1,5 @@
 package com.example.demo.controller;
+import com.example.demo.service.TaskSchedulerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,9 @@ public class TaskController {
 	
 	@Autowired
     private TaskService jobservice;
+
+	@Autowired
+	private TaskSchedulerService taskSchedulerService;
 	
    /* public String viewHomePage(Model model) {
         List<Job> listJob = jobservice.listAllJob();
@@ -67,7 +71,7 @@ public class TaskController {
 	@RequestMapping(value = "/executeNow", method = RequestMethod.POST)
 	public void executeNow(@RequestBody Task task) {
 		System.out.println("Controller: going to execute the task now...");
-		String result = jobservice.executeNow(task);
+		String result = taskSchedulerService.executeNow(task);
 		System.out.println("result: "+result);
 		System.out.println("Controller: task was executed .");
 	}
