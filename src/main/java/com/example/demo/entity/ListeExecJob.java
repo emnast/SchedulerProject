@@ -49,28 +49,55 @@ public class ListeExecJob implements Serializable {
     private String status;
     
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern="yyyy-MM-dd 'T' HH:mm")
     @Column(name = "date_creation")
     @CreatedDate
     private Date date_creation;
     
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd 'T' HH:mm")
     @JoinColumn(name = "date_execution")
     private Date date_execution;
     
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd 'T' HH:mm")
     @Column(name = "fin_execution")
     private Date fin_execution;
     
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(pattern="yyyy-MM-dd 'T' HH:mm")
     @Column(name = "next_execution")
     private Date next_execution;
     
+    @Column(name = "logfile")
+    private String logfile;
+   // private Duration duration;
+    
    
-    @ManyToOne
+    public String getLogfile() {
+		return logfile;
+	}
+
+	public void setLogfile(String logfile) {
+		this.logfile = logfile;
+	}
+
+	@ManyToOne
     @JoinColumn(name = "id_task")
     @JsonIgnore
     private Task task;
+    
+	@OneToOne(mappedBy = "liste")
+    private Fichier f;
   
+	public Fichier getF() {
+		return f;
+	}
+
+	public void setF(Fichier f) {
+		this.f = f;
+	}
+/*	public void addF(Fichier f) {
+		getF().add((Fichier) f);
+		((Fichier) f).setListe(this);
+	}*/
     
     public int getIdListe() {
   		return idListe;
@@ -113,6 +140,14 @@ public class ListeExecJob implements Serializable {
 		this.status = status;
 	}
 
+	/*public Duration getDuration() {
+		return duration;
+	}
+	public void setDuration(Duration duration) {
+		this.duration= duration;
+	}*/
+	
+
 	public Task getTask() {
 		return task;
 		}
@@ -123,12 +158,11 @@ public class ListeExecJob implements Serializable {
 
 
 	public ListeExecJob() {
-	
 		
 	}
 
 	public ListeExecJob(int idListe, String status, Date date_creation, Date date_execution, Date fin_execution,
-			Date next_execution) {
+			Date next_execution, String logfile) {
 		super();
 		this.idListe = idListe;
 		this.status = status;
@@ -136,6 +170,8 @@ public class ListeExecJob implements Serializable {
 		this.date_execution = date_execution;
 		this.fin_execution = fin_execution;
 		this.next_execution = next_execution;
+		//this.duration = duration;
+		this.logfile=logfile;
 	}
 	
 
