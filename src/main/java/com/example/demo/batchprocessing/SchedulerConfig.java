@@ -1,72 +1,38 @@
-package com.example.demo.batchprocessing;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.stream.Stream;
-
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.Trigger;
-import org.springframework.scheduling.TriggerContext;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.annotation.SchedulingConfigurer;
-import org.springframework.scheduling.config.ScheduledTaskRegistrar;
-import org.springframework.scheduling.config.TriggerTask;
-import org.springframework.scheduling.support.CronTrigger;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.example.demo.entity.ListeExecJob;
-import com.example.demo.entity.Task;
-import com.example.demo.repository.ListeExecJobRepository;
-import com.example.demo.repository.TaskRepository;
-import com.example.demo.service.ListeExecJobService;
-import com.example.demo.service.TaskService;
-
-
-@ConditionalOnProperty(name = "scheduler.enabled")
 @Configuration
 @EnableScheduling
 public class SchedulerConfig implements SchedulingConfigurer, DisposableBean {
 
-	/*@Value("${scheduler.trigger.cron-expression}")
-	protected String cronExpression;*/
 	ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-	
-	 @Value("${scheduler.enabled:true}")
-	    private boolean active;
 	
 	@Autowired
 	private TaskRepository repository;
-
-	@Override
 	
+	@Autowired
+	private ListeExecJobRepository rep;
+	
+	@Autowired
+	private FichierRepository frepo;
+	
+	@Autowired
+    private TaskService service;
+
+
+	    private String s;
+	    
+	@Override
 	public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-		
-		//List<Task> tasks = Arrays.asList(new Task(), new Task());//get from DB
 		
 		List<Task> tasks = repository.findAll();
 		tasks.forEach(t -> {
-			
-	if(t.getActive() == true) {
-		
+	     
 			ListeExecJob liste= new ListeExecJob();
 			
-			liste.setTask(t);
-			liste.setDate_execution(new Date());
+			liste.setDate_creation(new Date());
 			
+			if (t.getActive()==true) {
+				liste.setDate_execution(new Date());
 			Runnable runnableTask = () -> executeBatFile(t.getScript(), liste);
-			liste.setFin_execution(new Date());
+			//liste.setFin_execution(new Date());
 	
 			Trigger trigger = new Trigger() {
 
@@ -76,17 +42,17 @@ public class SchedulerConfig implements SchedulingConfigurer, DisposableBean {
 					CronTrigger crontrigger = new CronTrigger(t.getCronExpression());
 
 					return crontrigger.nextExecutionTime(triggerContext);
-
 				}
 
 			};
-
+			
 			taskRegistrar.addTriggerTask(runnableTask, trigger);
-			liste.setFin_execution(new Date());
+			//liste.setFin_execution(new Date());
 	}
-			      t.addListe(liste);
-			//liste.setTask(t);
+			//t.addListe(liste);
+			liste.setTask(t);
 			rep.save(liste);
+		
 		});
 		
 	}
@@ -103,23 +69,51 @@ public class SchedulerConfig implements SchedulingConfigurer, DisposableBean {
 	
 	//@Transactional(readOnly=true)
 	public void executeBatFile(String filePath, ListeExecJob liste) {
+	
 		try {
-			
-			Runtime.getRuntime().
-			   exec("cmd /c " + filePath);
-			liste.setStatus("success");
+			String fichierlog;
+
+                ProcessBuilder process = new ProcessBuilder(filePath);
+                process.redirectErrorStream(true);
+
+                Process shell = process.start();
+
+                //shell.waitFor();
+                BufferedReader stdInput = new BufferedReader(new InputStreamReader(shell.getInputStream()));
+                BufferedReader stdError = new BufferedReader(new InputStreamReader(shell.getErrorStream()));
+
+                // read the output from the command
+                System.out.println("Here is the standard output of the command:\n");
+                while ((fichierlog = stdInput.readLine()) != null) {
+                    System.out.println("s:" + fichierlog );
+                }
+
+                // read any errors from the attempted command
+                System.out.println("Here is the standard error of the command (if any):\n");
+                while ((fichierlog  = stdError.readLine()) != null) {
+                    System.out.println("w:" + fichierlog );
+                    
+                }
+                liste.setLogfile(fichierlog);
+                liste.setStatus("succès");
+    			liste.setFin_execution(new Date());
 			
 		} catch (IOException e) {
 			e.printStackTrace();
-			liste.setStatus("failed");
+			liste.setStatus("échoué");
 			
 		}
-		
+		rep.save(liste);
 	}
-	@Bean
+	
+
+@Bean
 public ScheduledExecutorService executor(){
     return executor;
 }
 
+@Bean
+public ScheduledTaskRegistrar taskRegistrar(){
+	return new ScheduledTaskRegistrar();
 }
-
+}
