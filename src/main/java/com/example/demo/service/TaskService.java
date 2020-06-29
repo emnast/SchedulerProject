@@ -35,15 +35,20 @@ public class TaskService {
 	@Autowired
 	private TaskRepository repository;
 	
+	@Autowired
+	private ListeExecJobRepository rep;
 
 	@Autowired
 	private ListeExecJobService service;
 
-	
+	@Autowired
 	private ScheduledTaskRegistrar taskRegistrar;
 
 	@Autowired
 	private SchedulerConfig sc;
+	
+	@Autowired
+	private ScheduledExecutorService executor;
 
 	@Autowired
 	public TaskService(TaskRepository repository) {
@@ -70,7 +75,7 @@ public class TaskService {
        	  service.addListeExecJob(ab);
        	  System.out.println(ab.getIdListe());*/
 		
-		if (task.getActive()==true) {
+	/*	if (task.getActive()==true) {
 		Runnable runnableTask = () -> sc.executeBatFile(task.getScript(), liste);
 
 		Trigger trigger = new Trigger() {
@@ -82,17 +87,19 @@ public class TaskService {
 			}
 		};
 		taskRegistrar.addTriggerTask(runnableTask, trigger);
-		}
-		/*List<ListeExecJob> a =task.getListe();
+		}*/
+		List<ListeExecJob> a =task.getListe();
 		repository.save(task);
 		for (Iterator iterator = a.iterator(); iterator.hasNext();) {
 			ListeExecJob e = (ListeExecJob) iterator.next();
 			e.setTask(task);
 		}
-		service.updateList(a);*/
-                           rep.save(liste);
-				repository.save(task);
-
+		service.updateList(a);
+		//task.addListe(liste);
+		liste.setTask(task);
+		rep.save(liste);
+		repository.save(task);
+		
 		return task;
 
 	}
@@ -127,27 +134,22 @@ public class TaskService {
 		liste.setTask(t);
 		liste.setDate_execution(new Date());
 		
-		/*ListeExecJob ab = null;
-		if(t.getListe() != null)
-			ab = service.getByreferenece(((ListeExecJob) t.getListe()).getIdListe());
-		else {
-			ab = service.addListeExecJob(new ListeExecJob());
-			t.setListe((List<ListeExecJob>) ab);
-		}
-		System.out.println("(Execute Now) Execution List ID:"+ab.getIdListe());
-		final ListeExecJob liste = ab;*/
 		Runnable runnableTask = () -> sc.executeBatFile(t.getScript(), liste);
 		taskRegistrar.addTriggerTask(runnableTask, crontrigger);
-			executor.schedule(runnableTask,3L, TimeUnit.SECONDS);
 		
+		executor.schedule(runnableTask,3L, TimeUnit.SECONDS);
+		
+		liste.setFin_execution(new Date());
 		
 		System.out.println("task was executed .");
-	//	service.updateListeExecJob(liste.getIdListe(), liste);
+		//service.updateListeExecJob(liste.getIdListe(), liste);
+		
 		t.addListe(liste);
 		liste.setTask(t);
 		rep.save(liste);
 		repository.save(t);
 		return "OK";
+		
 	}
 
 	public Task updateTask(Integer id, Task task) {
