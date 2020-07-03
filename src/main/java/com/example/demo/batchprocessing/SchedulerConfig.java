@@ -71,7 +71,11 @@ public class SchedulerConfig implements SchedulingConfigurer, DisposableBean {
 	public void executeBatFile(String filePath, ListeExecJob liste) {
 	
 		try {
-			String fichierlog;
+			Runtime.getRuntime().
+			   exec("cmd /c " + filePath);
+			liste.setStatus("succès");
+			liste.setFin_execution(new Date());
+			/*String fichierlog;
 
                 ProcessBuilder process = new ProcessBuilder(filePath);
                 process.redirectErrorStream(true);
@@ -96,7 +100,7 @@ public class SchedulerConfig implements SchedulingConfigurer, DisposableBean {
                 }
                 liste.setLogfile(fichierlog);
                 liste.setStatus("succès");
-    			liste.setFin_execution(new Date());
+    			liste.setFin_execution(new Date());*/
 			
 		} catch (IOException e) {
 			e.printStackTrace();
