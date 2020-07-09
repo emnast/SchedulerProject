@@ -41,8 +41,8 @@ public class ListeExecJob implements Serializable {
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id_liste")
-    private int idListe;
+	@Column(name = "id")
+    private int id;
 	
     
     @Column(name = "status")
@@ -79,12 +79,13 @@ public class ListeExecJob implements Serializable {
 		this.logfile = logfile;
 	}
 
-	@ManyToOne
+		@ManyToOne
     @JoinColumn(name = "id_task")
     @JsonIgnore
     private Task task;
     
 	@OneToOne(mappedBy = "liste")
+	@JoinColumn(name = "liste_id")
     private Fichier f;
   
 	public Fichier getF() {
@@ -100,11 +101,11 @@ public class ListeExecJob implements Serializable {
 	}*/
     
     public int getIdListe() {
-  		return idListe;
+  		return id;
   	}
 
   	public void setIdListe(int idListe) {
-  		this.idListe = idListe;
+  		this.id = idListe;
   	}
   	
 
@@ -164,7 +165,7 @@ public class ListeExecJob implements Serializable {
 	public ListeExecJob(int idListe, String status, Date date_creation, Date date_execution, Date fin_execution,
 			Date next_execution, String logfile) {
 		super();
-		this.idListe = idListe;
+		this.id = idListe;
 		this.status = status;
 		this.date_creation = date_creation;
 		this.date_execution = date_execution;
@@ -173,6 +174,5 @@ public class ListeExecJob implements Serializable {
 		//this.duration = duration;
 		this.logfile=logfile;
 	}
-	
 
 }
