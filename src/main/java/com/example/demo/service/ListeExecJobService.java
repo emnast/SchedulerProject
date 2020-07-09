@@ -35,13 +35,20 @@ public class ListeExecJobService {
 	public ListeExecJob addListeExecJob(ListeExecJob SJI) {
 		Task t = serv.getByreferenece(SJI.getTask().getId());
 		t.addListe(SJI);
+		
+		Fichier f =SJI.getF();
+		f.setListe(SJI);
+		frepos.save(f);
+		
+		SJIRepos.save(SJI);
 		/*if (t == null) {
 			t = new Task();
 			serv.addTask(t);
 			System.out.println("ID:"+t.getId());
-		}*/
-		
-		return SJIRepos.save(SJI);
+			
+		}
+		return SJIRepos.save(SJI);*/
+		return SJI;
 		
 	}
 	public List<ListeExecJob> updateList(List<ListeExecJob> SJI) {
